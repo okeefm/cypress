@@ -11,7 +11,7 @@ class VendorsController < ApplicationController
 
 
   def index
-    @vendors = Vendor.all
+    @vendors = Vendor.all.includes(:products)
     respond_to do |f|
       f.json {render :json=> @vendors }
       f.html {}

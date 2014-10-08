@@ -57,13 +57,14 @@
               <th></th>
             </tr>
           </thead>
+          <tbody>
           <% result_tests.each do |test|
             if test.passing?
               success_rate = 100
             else
               success_rate = 0
             end %>
-            <tbody>
+            
               <% if !test.test_executions.empty?
                 first_td_class = 'expander toggle'
                 dot_color = result_status
@@ -102,8 +103,8 @@
                   </tr>
                 <% end %>
               <% end %>
-            </tbody>
-          <% end %>
+            <% end %>
+          </tbody>
         <% end %>
       </table>
     </section>

@@ -194,8 +194,13 @@ module Cypress
 
       @pdf.text "Tested Measures"
 
-      set_style({font: "Courier"})
-      @pdf.text JSON.pretty_generate(JSON.parse(@test_execution.product_test.measures.to_json(only: [:name, :cms_id, :hqmf_id, :nqf_id])))
+      table_content = []
+      table_content << ["Name", "Subtitle", "CMS ID", "NQF ID", "HQMF ID"]
+      @test_execution.product_test.measures.each do |mes|
+        table_content << [mes.name, mes.subtitle, mes.cms_id, mes.nqf_id, mes.hqmf_id]
+      end
+      set_style({size: 8})
+      @pdf.table(table_content, column_widths: [260, 75, 50, 40, 100])
       set_default_style
     end
 

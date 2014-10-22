@@ -29,6 +29,8 @@ module Cypress
       qrda_warnings_section
       quality_measures_section
       vendor_xml_section
+      record_mapping_section
+      test_mapping_section
     end
 
     def inpatient_product_test
@@ -40,6 +42,8 @@ module Cypress
       qrda_warnings_section
       quality_measures_section
       vendor_xml_section
+      record_mapping_section
+      test_mapping_section
     end
 
     def qrda_product_test
@@ -50,6 +54,8 @@ module Cypress
       qrda_errors_section
       qrda_warnings_section
       vendor_xml_section
+      record_mapping_section
+      test_mapping_section
     end
 
     def static_cv_product_test
@@ -61,6 +67,8 @@ module Cypress
       qrda_warnings_section
       quality_cv_measures_section
       vendor_xml_section
+      record_mapping_section
+      test_mapping_section
     end
 
 
@@ -109,6 +117,8 @@ module Cypress
       @pdf.text "Inspection ID: #{@test_execution.product_test.product.vendor.name}"
       @pdf.text "Errors: #{@test_execution.count_errors}"
       @pdf.text "Warnings: #{@test_execution.count_warnings}"
+      @pdf.text "Bundle version: #{@test_execution.product_test.bundle.version}"
+      @pdf.text "Cypress version: #{APP_CONFIG['version']}"
     end
 
     def measure_errors_section
@@ -164,6 +174,31 @@ module Cypress
       end
     end
 
+    def record_mapping_section
+      new_section_margin
+
+      @pdf.text "Record Name Mapping"
+      table_content = []
+      table_content << ["Name", "Original"]
+      @test_execution.product_test.records.each do |rec|
+        table_content << ["#{rec.last}, #{rec.first}","#{rec.original_record.last}, #{rec.original_record.first}"] if rec.original_record
+      end
+      
+      set_style({size: 8})
+      @pdf.table(table_content, column_widths: [150, 150])
+      set_default_style
+    end
+
+    def test_mapping_section
+      new_section_margin
+
+      @pdf.text "Tested Measures"
+
+      set_style({font: "Courier"})
+      @pdf.text JSON.pretty_generate(JSON.parse(@test_execution.product_test.measures.to_json(only: [:name, :cms_id, :hqmf_id, :nqf_id])))
+      set_default_style
+    end
+
     def quality_measures_section
       new_section_margin
       @pdf.text "PASSING MEASURES"
@@ -210,11 +245,11 @@ module Cypress
         expected_result = @test_execution.expected_result(measure)
         reported_result = @test_execution.reported_result(measure)
 
-        measure = "#{measure.nqf_id} - #{measure.name} "
-        measure.concat(" - #{measure.subtitle}") if measure["sub_id"]
+        measure_name = "#{measure.nqf_id} - #{measure.name} "
+        measure_name.concat(" - #{measure.subtitle}") if measure["sub_id"]
         patients = "#{reported_result[QME::QualityReport::POPULATION]}/#{expected_result[QME::QualityReport::POPULATION]}"
 
-        row << measure
+        row << measure_name
         row << patients
 
         [QME::QualityReport::DENOMINATOR , QME::QualityReport::EXCLUSIONS, QME::QualityReport::NUMERATOR , "NUMEX" ,QME::QualityReport::EXCEPTIONS].each do |code|
@@ -247,11 +282,11 @@ module Cypress
         expected_result = @test_execution.expected_result(measure)
         reported_result = @test_execution.reported_result(measure)
 
-        measure = "#{measure.nqf_id} - #{measure.name} "
-        measure.concat(" - #{measure.subtitle}") if measure["sub_id"]
+        measure_name = "#{measure.nqf_id} - #{measure.name} "
+        measure_name.concat(" - #{measure.subtitle}") if measure["sub_id"]
         patients = "#{reported_result[QME::QualityReport::POPULATION]}/#{expected_result[QME::QualityReport::POPULATION]}"
 
-        row << measure
+        row << measure_name
         row << patients
 
         [QME::QualityReport::MSRPOPL , QME::QualityReport::OBSERVATION].each do |code|

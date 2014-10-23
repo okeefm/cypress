@@ -195,12 +195,16 @@ module Cypress
       @pdf.text "Tested Measures"
 
       table_content = []
-      table_content << ["Name", "Subtitle", "CMS ID", "NQF ID", "HQMF ID"]
+      table_content << ["Name", "CMS ID", "NQF ID", "HQMF ID"]
       @test_execution.product_test.measures.each do |mes|
-        table_content << [mes.name, mes.subtitle, mes.cms_id, mes.nqf_id, mes.hqmf_id]
+        if mes.subtitle
+          table_content << ["#{mes.name} - #{mes.subtitle}", mes.cms_id, mes.nqf_id, mes.hqmf_id]
+        else
+          table_content << ["#{mes.name}", mes.cms_id, mes.nqf_id, mes.hqmf_id]
+        end
       end
       set_style({size: 8})
-      @pdf.table(table_content, column_widths: [260, 75, 50, 40, 100])
+      @pdf.table(table_content, column_widths: [260, 50, 40, 175])
       set_default_style
     end
 

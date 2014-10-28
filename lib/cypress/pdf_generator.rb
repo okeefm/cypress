@@ -58,19 +58,6 @@ module Cypress
       test_mapping_section
     end
 
-    def static_cv_product_test
-      set_default_style
-
-      summary_section
-      measure_errors_section
-      qrda_errors_section
-      qrda_warnings_section
-      quality_cv_measures_section
-      vendor_xml_section
-      record_mapping_section
-      test_mapping_section
-    end
-
 
     private
 

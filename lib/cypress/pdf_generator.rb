@@ -101,7 +101,8 @@ module Cypress
 
       new_section_margin
       @pdf.text "Test Date: #{@test_execution.created_at}"
-      @pdf.text "Inspection ID: #{@test_execution.product_test.product.vendor.name}"
+      @pdf.text "Inspection ID: #{@test_execution.product_test.product.vendor.name}, Product ID: #{@test_execution.product_test.product.name}"
+      @pdf.text "Test name: #{@test_execution.product_test.name}, description: #{@test_execution.product_test.description}"
       @pdf.text "Errors: #{@test_execution.count_errors}"
       @pdf.text "Warnings: #{@test_execution.count_warnings}"
       @pdf.text "Bundle version: #{@test_execution.product_test.bundle.version}"
@@ -122,12 +123,14 @@ module Cypress
         errs = measure_error[1]
         mes = Measure.where(:hqmf_id=>measure[:measure_id], "population_ids.stratification" => measure[:stratification]).first
         if mes
-          @pdf.text "#{ind+1})    #{mes.display_name}: HQMF_ID: #{mes.hqmf_id} #{(measure[:stratification])? 'Stratification ID #{measure[:stratification]}': ''}"
+          measure_strat_var = ", Stratification ID: #{measure[:stratification]}"
+          @pdf.text "#{ind+1})    #{mes.display_name}: HQMF_ID: #{mes.hqmf_id}#{(measure[:stratification])? measure_strat_var : ''}"
           messages = errs.collect{|e| e.message}
           @pdf.indent(20) do
             messages.uniq.each do |e|
               @pdf.text "\u2022    #{e}"
             end
+            @pdf.text"\n"
           end
         end
       end

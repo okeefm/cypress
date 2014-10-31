@@ -115,8 +115,21 @@ module Cypress
         @pdf.text "Errors"
       end
 
-      errors.each_with_index do |error, index|
-        @pdf.text "#{index + 1}. #{error.measure_id} #{error.message}"
+      grouped_errors = @test_execution.execution_errors.by_validation_type(:result_validation).by_type(:error).group_by{|m| {measure_id: m.measure_id, stratification: m.stratification}}
+
+      grouped_errors.each_with_index do |measure_error,ind|
+        measure = measure_error[0]
+        errs = measure_error[1]
+        mes = Measure.where(:hqmf_id=>measure[:measure_id], "population_ids.stratification" => measure[:stratification]).first
+        if mes
+          @pdf.text "#{ind+1})    #{mes.display_name}: HQMF_ID: #{mes.hqmf_id} #{(measure[:stratification])? 'Stratification ID #{measure[:stratification]}': ''}"
+          messages = errs.collect{|e| e.message}
+          @pdf.indent(20) do
+            messages.uniq.each do |e|
+              @pdf.text "\u2022    #{e}"
+            end
+          end
+        end
       end
     end
 
@@ -131,10 +144,11 @@ module Cypress
       grouped_errors.each_pair do |fname, err_group|
         @pdf.text fname || ""
         err_group.each_with_index do |error, index|
-         @pdf.text "#{index + 1}. #{error.message}"
+          cleaned_error_message = error.message.delete("\n").squeeze(' ')
+          @pdf.text "#{index + 1})    #{cleaned_error_message}"
         end
         @pdf.text  ""
-    end
+      end
     end
 
     def qrda_errors_section
@@ -145,7 +159,8 @@ module Cypress
       end
 
       errors.each_with_index do |error, index|
-        @pdf.text "#{index + 1}. #{error.message}"
+        cleaned_error_message = error.message.delete("\n").squeeze(' ')
+        @pdf.text "#{index + 1})    #{cleaned_error_message}"
       end
     end
 
@@ -157,7 +172,8 @@ module Cypress
       end
 
       errors.each_with_index do |error, index|
-        @pdf.text "#{index + 1}. #{error.message}"
+        cleaned_error_message = error.message.delete("\n").squeeze(' ')
+        @pdf.text "#{index + 1})    #{cleaned_error_message}"
       end
     end
 

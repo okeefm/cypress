@@ -201,16 +201,14 @@ module Cypress
       @pdf.text "Tested Measures"
 
       table_content = []
-      table_content << ["Name", "CMS ID", "NQF ID", "HQMF ID"]
-      @test_execution.product_test.measures.each do |mes|
-        if mes.subtitle
-          table_content << ["#{mes.name} - #{mes.subtitle}", mes.cms_id, mes.nqf_id, mes.hqmf_id]
-        else
-          table_content << ["#{mes.name}", mes.cms_id, mes.nqf_id, mes.hqmf_id]
-        end
+      table_content << ["Name", "Submeasures", "CMS ID", "NQF ID", "HQMF ID"]
+      @test_execution.product_test.measures.group_by {|m| m.hqmf_id}.each do |id, measures|
+        mes = measures[0]
+        subtitles = measures.collect {|m| m.subtitle}.join(", ")
+        table_content << ["#{mes.name}", subtitles, mes.cms_id, mes.nqf_id, mes.hqmf_id]
       end
       set_style({size: 8})
-      @pdf.table(table_content, column_widths: [260, 50, 40, 175])
+      @pdf.table(table_content, column_widths: [175, 125, 50, 40, 150])
       set_default_style
     end
 

@@ -103,7 +103,7 @@
                   <td class="name"><a href="<%= product_test_path(cat3_test) %>"><%= cat3_test.name %></a></td>
                   <td class="type">QRDA Cat III</td>
                   <td class="info"><%= cat3_test.description %></td>
-                  <td class="time"><%= cat3_test.created_at.strftime("%b %e, %l:%M %p") %></td>
+                  <td class="time"><%= cat3_test.created_at ? cat3_test.created_at.strftime("%b %e, %l:%M %p") : "" %></td>
                   <td><%= cat3_test.test_executions.size %></td>
                   <td></td>
                   <td class="align-right"><%= link_to 'Delete', product_test_path(cat3_test), data: { :method => :delete, :confirm => 'Are you sure?' }, :class => 'cmd del' %></td>
@@ -131,7 +131,7 @@
                   <td class="name"><a href="<%= product_test_path(cat3_test) %>"><%= cat3_test.name %></a></td>
                   <td class="type"><%= type %></td>
                   <td class="info"><%= cat3_test.description %></td>
-                  <td class="time"><%= cat3_test.created_at.strftime("%b %e, %l:%M %p") %></td>
+                  <td class="time"><%= cat3_test.created_at ? cat3_test.created_at.strftime("%b %e, %l:%M %p") : "" %></td>
                   <td><%= cat3_test.test_executions.size %></td>
                   <td></td>
                   <td class="align-right"><%= link_to 'Delete', product_test_path(cat3_test), data: { :method => :delete, :confirm => 'Are you sure?' }, :class => 'cmd del' %></td>
@@ -154,7 +154,7 @@
                   <td class="name"><a href="<%= product_test_path(cat1_test) %>"><%= cat1_test.name %></a></td>
                   <td class="type">QRDA Cat I</td>
                   <td class="info"><%= cat1_test.description %></td>
-                  <td class="time"><%= cat1_test.created_at.strftime("%b %e, %l:%M %p") %></td>
+                  <td class="time"><%= cat1_test.created_at ? cat3_test.created_at.strftime("%b %e, %l:%M %p") : "" %></td>
                   <td><%= cat1_test.test_executions.size %></td>
                   <td></td>
                   <td class="align-right"><%= link_to 'Delete', product_test_path(cat1_test), data: { :method => :delete, :confirm => 'Are you sure?' }, :class => 'cmd del' %></td>

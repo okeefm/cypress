@@ -845,6 +845,15 @@ CYPRESS_SITE_END
 fi
 rm /etc/apache2/sites-enabled/000-default*
 ln -s /etc/apache2/sites-available/cypress /etc/apache2/sites-enabled/000-default.conf
+
+if [ ! -f /etc/apache2/conf-available/cypress.conf ]; then
+  export LC_CYTPE=C
+  SECRET_KEY_BASE=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 129 | head -n 1)
+  cat << CYPRESS_CONF_END > /etc/apache2/conf-available/cypress.conf
+    SetEnv SECRET_KEY_BASE ${SECRET_KEY_BASE}
+CYPRESS_CONF_END
+  ln -s /etc/apache2/conf-available/cypress.conf /etc/apache2/conf-enabled/cypress.conf
+fi
 success "done"
 # install passenger configuration
 echo -n "   Install Passenger configuration: "

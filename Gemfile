@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'bson'
-gem 'rails', '~> 4.1.8'
+gem 'rails', '~> 4.2.0'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'rake'
@@ -12,9 +12,9 @@ gem 'rake'
 # gem 'quality-measure-engine', :path => '../quality-measure-engine'
 
 gem 'quality-measure-engine', '3.1.2'
-gem 'health-data-standards', "3.5.3"
+# gem 'health-data-standards', "3.5.3"
 
-# gem 'health-data-standards',:git => 'https://github.com/projectcypress/health-data-standards.git', :branch => 'master'
+gem 'health-data-standards',:git => 'https://github.com/projectcypress/health-data-standards.git', :branch => 'bump_as'
 
 
 #gem 'quality-measure-engine', '~> 2.5.0'
@@ -38,7 +38,7 @@ gem 'highline'
 # Switched to AASM, because state_machine hasn't been updated in almost a year
 gem 'aasm'
 
-gem 'devise', '~> 3.2'
+gem 'devise'
 gem 'simple_form'
 
 gem "prawn", :require => "prawn"
@@ -77,11 +77,11 @@ group :test do
   gem 'mocha', :require => false
   gem 'webmock'
   gem 'rails-perftest'
-  gem 'ruby-prof'
+  gem 'ruby-prof', :platforms => [:ruby]
   gem 'simplecov'
 end
 
 group :production do
-  gem 'therubyracer', :platforms => [:ruby]
+  gem 'therubyracer', '0.12.1', :platforms => [:ruby]
   gem 'therubyrhino', :platforms => [:jruby]
 end

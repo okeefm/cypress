@@ -67,7 +67,7 @@ class ProductTestsController < ApplicationController
     test = ProductTest.find(params[:id])
     format = params[:format]
 
-    UserMailer.send_records(test, format, params[:email]).deliver
+    UserMailer.send_records(test, format, params[:email]).deliver_now
 
     redirect_to :action => 'show'
   end

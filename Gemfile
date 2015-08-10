@@ -65,6 +65,13 @@ group :assets do
   gem 'uglifier'
 end
 
+group :capybara do
+  gem 'capybara'
+  gem 'capybara-webkit'
+  gem 'poltergeist'
+  gem 'show_me_the_cookies'
+end
+
 group :test, :develop do
 	gem 'pry'
   gem 'pry-nav'

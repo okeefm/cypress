@@ -30,3 +30,6 @@ contrib/packer_cache/
 # For built boxes
 contrib/output*
 contrib/*.tgz
+
+#For capybara testing, ignore the test_links.dat file
+script/test_links.dat
